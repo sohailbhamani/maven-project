@@ -21,17 +21,11 @@ pipeline {
         stage("Deploy and SCA"){
             parallel {
                 stage('Deploy to Staging') {
-                    agent {
-                        label "staging"
-                    }
                     steps{
                         build job: 'deploy-to-staging'
                     }
                 }
                 stage('Static Code Analysis') {
-                    agent {
-                        label "checkstyle"
-                    }
                     steps{
                         buils job: 'static analysis'
                     }
