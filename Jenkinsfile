@@ -7,7 +7,6 @@ pipeline {
     stages{
         stage('Build'){
             steps {
-                
                 withEnv( ["PATH+MAVEN=${tool mvn_version}/bin"] ) {
                     sh "mvn clean package"
                 }
@@ -19,29 +18,27 @@ pipeline {
                 }
             }
         }
-        stages{
-            stage("Deploy and SCA"){
-                steps {
-                    parallel {
-                        stage('Deploy to Staging') {
-                            agent {
-                                label "staging"
-                            }
-                            steps{
-                                build job: 'deploy-to-staging'
-                            }
+        stage("Deploy and SCA"){
+            steps {
+                parallel {
+                    stage('Deploy to Staging') {
+                        agent {
+                            label "staging"
                         }
-                        stage('Static Code Analysis') {
-                            agent {
-                                label "checkstyle"
-                            }
-                            steps{
-                                buils job: 'static analysis'
-                            }
+                        steps{
+                            build job: 'deploy-to-staging'
+                        }
+                    }
+                    stage('Static Code Analysis') {
+                        agent {
+                            label "checkstyle"
+                        }
+                        steps{
+                            buils job: 'static analysis'
                         }
                     }
                 }
             }
-        }
+        }    
     }
 }
