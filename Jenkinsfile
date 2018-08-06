@@ -19,7 +19,7 @@ pipeline {
                 }
             }
         }
-        stage('Deploy to Staging and Checkstyle Concurrently'){
+        stages('Deploy to Staging and Checkstyle Concurrently'){
             steps {
                 parallel {
                     stage('Deploy to Staging') {
