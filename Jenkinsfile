@@ -18,19 +18,10 @@ pipeline {
                 }
             }
         }
-        stage("Deploy and SCA"){
-            parallel {
-                stage('Deploy to Staging') {
-                    steps{
-                        build job: 'deploy-to-staging'
-                    }
-                }
-                stage('Static Code Analysis') {
-                    steps{
-                        buils job: 'static analysis'
-                    }
-                }
+         stage('Deploy to Staging'){
+            steps {
+                build job: 'Deploy-to-staging'
             }
-        }    
+        }
     }
 }
