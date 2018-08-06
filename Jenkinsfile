@@ -19,23 +19,25 @@ pipeline {
                 }
             }
         }
-        stages('Deploy to Staging and Checkstyle Concurrently'){
-            steps {
-                parallel {
-                    stage('Deploy to Staging') {
-                        agent {
-                            label "staging"
+        stages{
+            stage("Deploy and SCA"){
+                steps {
+                    parallel {
+                        stage('Deploy to Staging') {
+                            agent {
+                                label "staging"
+                            }
+                            steps{
+                                build job: 'deploy-to-staging'
+                            }
                         }
-                        steps{
-                            build job: 'deploy-to-staging'
-                        }
-                    }
-                    stage('Static Code Analysis') {
-                        agent {
-                            label "checkstyle"
-                        }
-                        steps{
-                            buils job: 'static analysis'
+                        stage('Static Code Analysis') {
+                            agent {
+                                label "checkstyle"
+                            }
+                            steps{
+                                buils job: 'static analysis'
+                            }
                         }
                     }
                 }
