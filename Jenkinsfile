@@ -1,15 +1,14 @@
 pipeline {
     
-    environment {
-        def mvn_version = 'localMaven'
-    }
+    tools {
+        maven 'localMaven'
+    }    
+    
     agent any
     stages{
         stage('Build'){
             steps {
-                withEnv( ["PATH+MAVEN=${tool mvn_version}/bin"] ) {
                     sh "mvn clean package"
-                }
             }
             post {
                 success {
@@ -23,13 +22,11 @@ pipeline {
                 build job: 'Deploy-to-staging'
             }
         }
-        
         stage('SCA'){
             steps {
                 build job: 'static analysis'
             }
         }
-        
         stage ('Deploy to Production'){
             steps{
                 timeout(time:5, unit:'DAYS'){
